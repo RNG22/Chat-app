@@ -27,3 +27,26 @@ in server controller wrote logic and routes , connected through routes and model
 2)login
 3)get all users
 4)get user by id -->
+
+
+<!-- react -->
+<!-- 1.routes -->
+<!-- cd client
+npm create vite@latest
+if stoped running the project then type npm run dev
+in another terminal cd client->npm i react-router-dom -->
+
+<!-- in app.jsx import Routes,Route,Navigate
+import Chat from "./pages/Chat"
+structure
+<Routes>
+<Route path="/" element={<Chat/>} />
+</Routes>
+in main.jsx
+import {BrowserRouter} from 'react-router-dom';
+<BrowserRouter>
+<App/>
+</BrowserRouter> -->
+
+<!-- 2.react bootstrap -->
+<!-- npm i react-bootstrap bootstrap -->
