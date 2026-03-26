@@ -50,3 +50,26 @@ import {BrowserRouter} from 'react-router-dom';
 
 <!-- 2.react bootstrap -->
 <!-- npm i react-bootstrap bootstrap -->
+
+<!-- 3.context api for form data frontend data-->
+<!-- always this syntax, create context create contextprovider function in componewnt call it by useContext -->
+<!-- in register component -->
+<!-- const {registerInfo}=useContext(AuthContext) -->
+<!-- create context folder with AuthContext.jsx
+inside that export const AuthContext=createContext();
+export const AuthContextProvider=({children})=>{
+    const [registeInfo,setRegisterInfo]=useState({
+        name:"",
+        email:"",
+        password:""
+    })
+    call backfunction for reducing redundancy cache function
+    const updateRegister=useCallback((info)=>{
+setRegisterInfo(info)
+    },[])
+    return (
+        <AuthContext.Provider value={{all states,setstates,functions}}>
+        {children}
+        </AuthContext.Provider>
+    )
+} -->
