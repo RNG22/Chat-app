@@ -13,16 +13,16 @@ const registerUser=async (req,res)=>{
     let user=await userModel.findOne({email});
     if(user){
         //400-error in client side
-        return res.status(400).json({msg:"user already exists"})
+        return res.status(400).json({message:"user already exists"})
     }
     if(!name || !email || !password){
-        return res.status(400).json({msg:"please enter all the fields"})
+        return res.status(400).json({message:"please enter all the fields"})
     }
     if(!validator.isEmail(email)){
-        return res.status(400).json({msg:"please enter a valid email"})
+        return res.status(400).json({message:"please enter a valid email"})
     }
     if(!validator.isStrongPassword(password)){
-        return res.status(400).json({msg:"password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number and one symbol"})
+        return res.status(400).json({message:"password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number and one symbol"})
     }
     user=new userModel({
         name,
@@ -36,7 +36,7 @@ const registerUser=async (req,res)=>{
     res.status(201).json({_id:user._id,name,email,token})
     }catch(err){
         console.log(err)
-        res.status(500).json({msg:err.message})
+        res.status(500).json({message: err.message})
     }
 }
 // login user
@@ -45,18 +45,18 @@ const loginUser=async (req,res)=>{
     try{
         let user=await userModel.findOne({email});
          if(!user){
-            return res.status(400).json({msg:"Invalid credentials"})
+            return res.status(400).json({message:"Invalid credentials"})
         }
         const isValidPassword=await bcrypt.compare(password,user.password);
 if(!isValidPassword){
-    return res.status(400).json({msg:"Invalid credentials"})
+    return res.status(400).json({message:"Invalid credentials"})
 }
         const token=createToken(user._id);
         res.status(200).json({_id:user._id,name:user.name,email,token})
 
     }catch(err){
         console.log(err)
-        res.status(500).json({msg:err.message})
+        res.status(500).json({message: err.message})
     }
 }
 
@@ -66,12 +66,12 @@ const findUser=async (req,res)=>{
     try{
         const user=await userModel.findById(userId);
         if(!user){
-            return res.status(404).json({msg:"user not found"})
+            return res.status(404).json({message:"user not found"})
         }
         res.status(200).json(user)
     }catch(err){
         console.log(err)
-        res.status(500).json({msg:err.message})
+        res.status(500).json({message: err.message})
     }
 }
 //get users
@@ -81,7 +81,7 @@ const getUsers=async (req,res)=>{
         res.status(200).json(users)
     }catch(err){
         console.log(err)
-        res.status(500).json({msg:err.message})
+        res.status(500).json({message: err.message})
     }
 }
 
