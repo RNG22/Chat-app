@@ -1,5 +1,4 @@
 # Chat-app
-<!-- hi -->
 <!-- create folders server client, socket -->
 <!-- in server npm init --yes -->
 <!-- npm i express mongoose cors dotenv -->
@@ -73,3 +72,12 @@ setRegisterInfo(info)
         </AuthContext.Provider>
     )
 } -->
+
+<!-- chat apis -->
+<!-- create model, import it in controller, import controller in routes, import routes in index.js -->
+<!-- in controller //createChat
+//findUsersChats
+//findChat -->
+<!-- in routes router.post("/",createChat);
+router.get("/:userId",findUsersChats);
+router.get("/find/:firstId/:secondId",findChat); -->

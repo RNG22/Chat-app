@@ -1,3 +1,7 @@
+// register user
+// login user
+// find user
+// get users
 const userModel=require("../Models/userModel");
 const bcrypt=require("bcrypt");
 const validator=require("validator");
