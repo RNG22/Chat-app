@@ -2,11 +2,13 @@ const express=require("express");
 const cors=require("cors");
 const userRoute=require("./Routes/userRoute");
 const chatRoute=require("./Routes/chatRoute");
+const messageRoute=require("./Routes/messageRoute");
 const app=express();
 app.use(express.json())
 app.use(cors());
 app.use("/api/users",userRoute);
 app.use("/api/chats",chatRoute);
+app.use("/api/messages",messageRoute);
 
 require("dotenv").config();
 const mongoose=require("mongoose");
