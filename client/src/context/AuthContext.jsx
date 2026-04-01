@@ -74,7 +74,7 @@ const logoutUser=useCallback(() => {
     });
     
 }, []);
-console.log(registerInfo);
+// console.log(registerInfo);
     return (
         <AuthContext.Provider value={{ user,registerInfo, setRegisterInfo, updateRegisterInfo,registerError, isRegisterLoading, registerUser ,logoutUser, loginInfo, setLoginInfo, updateLoginInfo, loginError, isLoginLoading, loginUser}}>
             {children}

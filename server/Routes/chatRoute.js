@@ -3,7 +3,8 @@ const { createChat, findChat, findUsersChats } = require("../Controllers/chatCon
 const router=express.Router();
 
 router.post("/",createChat);
-router.get("/:userId",findUsersChats);
 router.get("/find/:firstId/:secondId",findChat);
+router.get("/:userId",findUsersChats);
+
 
 module.exports=router;
