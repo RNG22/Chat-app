@@ -81,3 +81,5 @@ setRegisterInfo(info)
 <!-- in routes router.post("/",createChat);
 router.get("/:userId",findUsersChats);
 router.get("/find/:firstId/:secondId",findChat); -->
+
+<!-- in client install  npm i moment for timestamp -->

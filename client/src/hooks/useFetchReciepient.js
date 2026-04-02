@@ -7,7 +7,8 @@ export const useFetchReciepient = (chat,user) => {
     // You would replace this with your actual logic to fetch recipients from your backend or state management.
   const [recipientUser, setRecipientUser] = useState(null);
   const [error, setError] = useState(null);
-   const recipientId=chat?.members.find((id)=>id!==user?._id);
+   const recipientId=chat?.members?.find((id)=>id!==user?._id);
+   
 useEffect(() => {
     const getuser = async () => {
         if (!recipientId) {
@@ -15,10 +16,10 @@ useEffect(() => {
             return null;
         }
   // server exposes GET /api/users/:userId
-  const response = await getRequest(`${BaseUrl}/Users/find/${recipientId}`);
+  const response = await getRequest(`${BaseUrl}/users/find/${recipientId}`);
         if (response.error) {
-            setError(response);     
-            return;
+            return setError(response);     
+        
         }
         setRecipientUser(response);
     }   

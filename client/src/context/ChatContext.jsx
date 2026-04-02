@@ -10,7 +10,13 @@ const [userChats,setUserChats]=useState(null);
 const [isUserChatsLoading,setIsUserChatsLoading]=useState(false);
 const [userChatsError,setUserChatsError]=useState(null);
 const [potentialChats,setPotentialChats]=useState([]);
+const [currentChat,setCurrentChat]=useState(null);
+const [messages,setMessages]=useState(null);
+const [isMessagesLoading,setIsMessagesLoading]=useState(false);
+const [messagesError,setMessagesError]=useState(null);
 
+console.log("messages", messages);
+// console.log("currentChat", currentChat);
 useEffect(() => {
     const getUsers = async () => {
        
@@ -21,7 +27,7 @@ useEffect(() => {
         }
 const pchat=response.filter((u)=>{
     let isChatCreated=false;
-    if(user._id===u._id){
+    if(user?._id===u._id){
         return false;
     }
     if(userChats){
@@ -66,7 +72,30 @@ if(response.error){
 }
 setUserChats((prevChats)=>[...prevChats,response])
 }, [])
+
+const updateCurrentChat=useCallback((chat)=>{
+    setCurrentChat(chat);
+}, [])
+
+useEffect(() => {
+    const getMessages = async () => {
+        // if(currentChat?._id){
+            setIsMessagesLoading(true);
+        setMessagesError(null);
+             // server route expects /api/messages/:chatId
+             const response = await getRequest(`${BaseUrl}/messages/${currentChat?._id}`);
+             setIsMessagesLoading(false);
+              if (response.error) {
+            return setMessagesError(response);
+        }
+        setMessages(response);
+        }
+    // };
+        getMessages();
+   
+}, [currentChat]);
+
 return (
-    <ChatContext.Provider value={{userChats,isUserChatsLoading,userChatsError,potentialChats,createChat}}>{children}</ChatContext.Provider>
+    <ChatContext.Provider value={{userChats,isUserChatsLoading,userChatsError,potentialChats,createChat,updateCurrentChat,messages,isMessagesLoading,messagesError,currentChat}}>{children}</ChatContext.Provider>
 )
 }
