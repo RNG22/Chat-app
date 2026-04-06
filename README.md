@@ -84,3 +84,12 @@ router.get("/find/:firstId/:secondId",findChat); -->
 
 <!-- in client install  npm i moment for timestamp -->
 <!-- npm i react-input-emoji -->
+
+
+<!-- socket -->
+<!-- create socket folder , in cmd write cd socket -> npm init -yes -->
+<!-- npm i socket.io -->
+<!-- in client -->
+<!-- cd client ->npm i socket.io-client -->
+<!-- in chatcontext file  -->
+<!-- in socket ->cd socket ->npm install nodemon --save-dev ->npx nodemon-->

@@ -1,8 +1,9 @@
-import { createContext } from "react";
+import { createContext, use } from "react";
 import { BaseUrl,getRequest,PostRequest } from "../utils/services";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
+import { io } from "socket.io-client";
 export const ChatContext=createContext();
 
 export const ChatContextProvider=({children,user})=>{
@@ -16,8 +17,47 @@ const [isMessagesLoading,setIsMessagesLoading]=useState(false);
 const [messagesError,setMessagesError]=useState(null);
 const [sendTextError,setSendTextError]=useState(null);
 const [newMessage,setNewMessage]=useState(null);
-
+const [socket,setSocket]=useState(null);
+const [onlineUsers,setOnlineUsers]=useState([]);
 console.log("messages", messages);
+
+// initial socket
+useEffect(() => {   
+    const newSocket=io("http://localhost:3000");
+    setSocket(newSocket);
+return()=>{
+    newSocket.disconnect();
+}
+}, [user]);
+//add user to socket server and listen for online users
+useEffect(() => {
+    if(socket==null ) return;
+        socket.emit("add_newuser", user?._id);
+        socket.on("online_users", (onlineUsers) => {
+            setOnlineUsers(onlineUsers);
+        });
+return()=>{
+    socket.off("online_users"); 
+}
+}, [socket]);
+//send message through socket
+useEffect(() => {
+    if(socket==null || newMessage==null) return;
+        const receipientId=currentChat?.members?.find((id)=>id!==user?._id);
+    socket.emit("send_message", {...newMessage, receipientId });
+}, [newMessage]);
+//receive message through socket
+useEffect(() => {
+    if(socket==null) return;
+    socket.on("receive_message", (message) => {
+        if(message.chatId!=message.chatId) return;
+        setMessages((prevMessages)=>[...prevMessages,message]);
+    });
+return()=>{
+    socket.off("receive_message");
+}
+}, [socket,currentChat]);
+
 // console.log("currentChat", currentChat);
 useEffect(() => {
     const getUsers = async () => {
@@ -113,6 +153,6 @@ const sendTextMessage=useCallback(async (textMessage,sender,currentChatId,setTex
 }, [])
 
 return (
-    <ChatContext.Provider value={{userChats,isUserChatsLoading,userChatsError,potentialChats,createChat,updateCurrentChat,messages,isMessagesLoading,messagesError,currentChat,sendTextMessage,sendTextError,newMessage}}>{children}</ChatContext.Provider>
+    <ChatContext.Provider value={{userChats,isUserChatsLoading,userChatsError,potentialChats,createChat,updateCurrentChat,messages,isMessagesLoading,messagesError,currentChat,sendTextMessage,sendTextError,newMessage, onlineUsers}}>{children}</ChatContext.Provider>
 )
 }
