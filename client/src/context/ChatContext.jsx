@@ -14,6 +14,8 @@ const [currentChat,setCurrentChat]=useState(null);
 const [messages,setMessages]=useState(null);
 const [isMessagesLoading,setIsMessagesLoading]=useState(false);
 const [messagesError,setMessagesError]=useState(null);
+const [sendTextError,setSendTextError]=useState(null);
+const [newMessage,setNewMessage]=useState(null);
 
 console.log("messages", messages);
 // console.log("currentChat", currentChat);
@@ -95,7 +97,22 @@ useEffect(() => {
    
 }, [currentChat]);
 
+const sendTextMessage=useCallback(async (textMessage,sender,currentChatId,setTextMessage)=>{
+    if(!textMessage.trim()){
+        return;
+    }
+    const response=await PostRequest(`${BaseUrl}/messages`,JSON.stringify
+        ({chatId:currentChatId,senderId:sender._id,text:textMessage}))
+        if(response.error){
+            return sendTextError(response);
+        }
+        // optimistically update messages list with new message
+        setNewMessage(response);
+         setMessages((prevMessages)=>[...prevMessages,response]);
+        setTextMessage("");
+}, [])
+
 return (
-    <ChatContext.Provider value={{userChats,isUserChatsLoading,userChatsError,potentialChats,createChat,updateCurrentChat,messages,isMessagesLoading,messagesError,currentChat}}>{children}</ChatContext.Provider>
+    <ChatContext.Provider value={{userChats,isUserChatsLoading,userChatsError,potentialChats,createChat,updateCurrentChat,messages,isMessagesLoading,messagesError,currentChat,sendTextMessage,sendTextError,newMessage}}>{children}</ChatContext.Provider>
 )
 }

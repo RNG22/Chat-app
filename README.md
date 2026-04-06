@@ -83,3 +83,4 @@ router.get("/:userId",findUsersChats);
 router.get("/find/:firstId/:secondId",findChat); -->
 
 <!-- in client install  npm i moment for timestamp -->
+<!-- npm i react-input-emoji -->
