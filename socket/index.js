@@ -21,6 +21,11 @@ socket.on("send_message", (message) => {
     if (user) {
         console.log("Sending message to user with socket ID:", user.socketId);
         io.to(user.socketId).emit("receive_message", message);
+        io.to(user.socketId).emit("getNotification", {
+                senderId: message.senderId,
+                isRead: false,
+                date: new Date(),
+        });
     } else {
         console.log("User not online, cannot send message");
     }

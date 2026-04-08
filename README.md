@@ -93,3 +93,5 @@ router.get("/find/:firstId/:secondId",findChat); -->
 <!-- cd client ->npm i socket.io-client -->
 <!-- in chatcontext file  -->
 <!-- in socket ->cd socket ->npm install nodemon --save-dev ->npx nodemon-->
+
+<!-- working on removing notification on clicking chat 1:03:26 -->
