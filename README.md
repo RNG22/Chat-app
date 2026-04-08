@@ -98,3 +98,4 @@ router.get("/find/:firstId/:secondId",findChat); -->
 
 
 <!-- if got any error for socket cors error, close all terminals, cd all folderes and rerun all servers -->
+<!-- client-5173, sever -2000 -->
