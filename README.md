@@ -95,3 +95,6 @@ router.get("/find/:firstId/:secondId",findChat); -->
 <!-- in socket ->cd socket ->npm install nodemon --save-dev ->npx nodemon-->
 
 <!-- working on removing notification on clicking chat 1:03:26 -->
+
+
+<!-- if got any error for socket cors error, close all terminals, cd all folderes and rerun all servers -->
