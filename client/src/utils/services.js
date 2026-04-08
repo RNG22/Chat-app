@@ -1,4 +1,5 @@
-    export const BaseUrl = "http://localhost:2000/api";
+    // export const BaseUrl = "http://localhost:2000/api";
+    export const BaseUrl = "https://chat-app-b7dy.onrender.com/api";
 
     export const PostRequest=async (url, body) => {
     console.log("Making POST request to:", url);
