@@ -14,9 +14,9 @@ require("dotenv").config();
 const mongoose=require("mongoose");
 const { Server } = require("socket.io");
 // crud
-// app.get("/",(req,res)=>{
-//     res.send("hello world")
-// })
+app.get("/",(req,res)=>{
+    res.send("Welcome to our Chat API...")
+})
 
 const port=process.env.PORT || 2000;
 const uri=process.env.ATLAS_URI;
