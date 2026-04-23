@@ -1,5 +1,5 @@
 # Chat-app
-<!-- create folders server client, socket -->
+<!-- create folders server, client, socket -->
 <!-- in server npm init --yes -->
 <!-- npm i express mongoose cors dotenv -->
 <!-- npm i cors@2.8.5 dotenv@16.0.3 express@4.18.2 mongoose@6.8.3 -->
@@ -34,8 +34,8 @@ in server controller wrote logic and routes , connected through routes and model
 npm create vite@latest
 if stoped running the project then type npm run dev
 in another terminal cd client->npm i react-router-dom -->
-
-<!-- in app.jsx import Routes,Route,Navigate
+<!-- //changed files app.jsx for all paths and main.jsx for <BowserRouter> -->
+<!-- in app.jsx import {Routes,Route,Navigate} from 'react-router-dom';
 import Chat from "./pages/Chat"
 structure
 <Routes>
@@ -49,13 +49,51 @@ import {BrowserRouter} from 'react-router-dom';
 
 <!-- 2.react bootstrap -->
 <!-- npm i react-bootstrap bootstrap -->
+<!-- can use react bootstrap components like import {container} from 'react-bootstrap' or use classnames by import 'bootstrap/dist/css/bootstrap.min.css'; className=:secondary-text" -->
+<!-- can import fonts from google fonts, go to google fonts select fonts copy style code paste it in index.css @import url("https/codefrom googlefonts website") and in body add font-family:"Nunito",sans-sarif; sans-sarif is fallback if nunito from google fonts not font -->
+
+<!-- in components create NavBar.jsx
+import {Container,Nav,Navbar,stack} from "react-bootstrap";
+import {Link} from 'react-router-dom'
+stack used to align items horizontal or vertically(default vertically)
+return <Navbar bg="dark"><Container>
+<h2><Link to="/">Chatapp</Link></h2>
+<span>Logged in as </span>
+<Nav direction="horizontal"><Link to="/login"><Link to="/register"></Nav>
+</Container></Navbar> -->
+<!-- in app.jsx
+<>
+<NavBar/>
+<Container>
+<Routes>
+<Route path="/" element={<Chat/>}></Route>
+</Routes>
+</Container>
+</> -->
+<!-- 
+in register.jsx
+import {Alert, Button,Form, Row, Col, Stack} from 'react-bootstrap';
+return(<>
+<Form>
+<Row><Col><Stack>
+<h1>Register</h1><Form.Control type="text" placeholder"Name" /></Form.Controltype="email" placeholder"Email" /></Form.Controltype="password" placeholder"Password" />
+<Button type="submit">Register</Button>
+<Alert>Error</Alert>
+</Stack></Col></Row>
+</Form>
+</>)
+same for login page
+ -->
+
 
 <!-- 3.context api for form data frontend data-->
-<!-- always this syntax, create context create contextprovider function in componewnt call it by useContext -->
-<!-- in register component -->
-<!-- const {registerInfo}=useContext(AuthContext) -->
+<!-- in src add context ->AuthContext.jsx -->
+<!-- always this syntax, create context, create contextprovider function in component call it by useContext -->
+
 <!-- create context folder with AuthContext.jsx
-inside that export const AuthContext=createContext();
+inside that 
+import {createContext} from 'react'
+export const AuthContext=createContext();
 export const AuthContextProvider=({children})=>{
     const [registeInfo,setRegisterInfo]=useState({
         name:"",
@@ -72,6 +110,10 @@ setRegisterInfo(info)
         </AuthContext.Provider>
     )
 } -->
+<!-- in main.jsx
+<React.StrictMode><BrowserRouter><AuthContextProvider><App> -->
+<!-- in register component -->
+<!-- const {registerInfo}=useContext(AuthContext) -->
 
 <!-- chat apis -->
 <!-- create model, import it in controller, import controller in routes, import routes in index.js -->

@@ -1,49 +1,140 @@
-    // export const BaseUrl = "http://localhost:2000/api";
-    export const BaseUrl = "https://chat-app-b7dy.onrender.com/api";
+// api.js
+import axios from "axios";
 
-    export const PostRequest=async (url, body) => {
-    console.log("Making POST request to:", url);
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body,
-            });
-            const data = await response.json();
-        if (!response.ok) {
-        
-            let message;
-                if (data?.message) {
-                    message = data.message;
-                } else {
-                    message = data;
-                }
-                return { error: true, message };
-            }
-        return data;
-    };
+// 🔥 Base URL
+export const BaseUrl = "https://chat-app-b7dy.onrender.com/api";
 
-    export const getRequest=async (url) => {
-        console.log("Making GET request to:", url);
-                const response = await fetch(url, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                });
-                // parse safely (some error responses may be HTML or empty)
-                let data = null;
-                try {
-                    const text = await response.text();
-                    data = text ? JSON.parse(text) : null;
-                } catch (e) {
-                    // non-JSON response (e.g., HTML 404 page) or empty body
-                    data = null;
-                }
-                if (!response.ok) {
-                    const message = data && data.message ? data.message : `Request failed with status ${response.status}`;
-                    return { error: true, message, status: response.status };
-                }
-                return data;
-        };  
+// 🔥 Create axios instance
+const api = axios.create({
+  baseURL: BaseUrl,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  // withCredentials: true, // for httpOnly cookies (if backend sets them)
+});
+
+
+// 🔐 Request Interceptor (attach JWT from localStorage)
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+
+// 🔐 Response Interceptor (handle token expiry)
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // prevent infinite retry
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        // 🔁 call refresh API
+        const res = await axios.get(
+          `${BaseUrl}/auth/refresh-token`
+        );
+
+        const newToken = res.data.token;
+
+        // 🔥 store new token
+        localStorage.setItem("token", newToken);
+
+        // retry original request
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        console.error("Session expired. Logging out...");
+
+        // ❌ clear token
+        localStorage.removeItem("token");
+
+        // redirect user
+        window.location.href = "/login";
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+
+// ✅ POST
+export const PostRequest = async (url, body) => {
+  console.log("POST:", url);
+
+  try {
+    const res = await api.post(url, body);
+    return res.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+
+// ✅ GET
+export const getRequest = async (url) => {
+  console.log("GET:", url);
+
+  try {
+    const res = await api.get(url);
+    return res.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+
+// ✅ PUT
+export const putRequest = async (url, body) => {
+  console.log("PUT:", url);
+
+  try {
+    const res = await api.put(url, body);
+    return res.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+
+// ✅ DELETE
+export const deleteRequest = async (url) => {
+  console.log("DELETE:", url);
+
+  try {
+    const res = await api.delete(url);
+    return res.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+
+// 🔥 Centralized Error Handler
+const handleError = (error) => {
+  return {
+    error: true,
+    message:
+      error.response?.data?.message ||
+      error.message ||
+      "Something went wrong",
+    status: error.response?.status,
+  };
+};
+
+export default api;

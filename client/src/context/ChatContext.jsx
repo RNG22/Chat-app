@@ -75,98 +75,193 @@ return()=>{
 
 // console.log("currentChat", currentChat);
 useEffect(() => {
-    const getUsers = async () => {
-       
-            // server route expects /api/chats/potential/:userId
-             const response = await getRequest(`${BaseUrl}/users`);
-              if (response.error) {
-            return setUserChatsError(response);
-        }
-const pchat=response.filter((u)=>{
-    let isChatCreated=false;
-    if(user?._id===u._id){
-        return false;
+  const getUsers = async () => {
+    const response = await getRequest("/users");
+
+    if (response.error) {
+      return setUserChatsError(response);
     }
-    if(userChats){
-        isChatCreated= userChats?.some((chat)=>{
-           return chat.members[0]===u._id || chat.members[1]===u._id
-        });
-    }
-    return !isChatCreated;
-})
-        setPotentialChats(pchat);
-        setAllUsers(response);
-    
-    };
-        getUsers();
-   
-}, [userChats]);
+
+    const pchat = response.filter((u) => {
+      if (user?._id === u._id) return false;
+
+      const isChatCreated = userChats?.some((chat) =>
+        chat.members.includes(u._id)
+      );
+
+      return !isChatCreated;
+    });
+
+    setPotentialChats(pchat);
+    setAllUsers(response);
+  };
+
+  getUsers();
+}, [userChats, user]);
 
 useEffect(() => {
-    const getUserChats = async () => {
-        if(user?._id){
-            setIsUserChatsLoading(true);
-        setUserChatsError(null);
-             // server route expects /api/chats/:userId
-             const response = await getRequest(`${BaseUrl}/chats/${user._id}`);
-             setIsUserChatsLoading(false);
-              if (response.error) {
-            return setUserChatsError(response);
-        }
-        setUserChats(response);
-        }
-    };
-        getUserChats();
-   
-}, [user,notifications]);
+  const getUserChats = async () => {
+    if (!user?._id) return;
 
-const createChat=useCallback(async (firstId,secondId) => {
-const response=await PostRequest
-(`${BaseUrl}/chats`,JSON.stringify({firstId,secondId})
-);
-if(response.error){
+    setIsUserChatsLoading(true);
+    setUserChatsError(null);
+
+    const response = await getRequest(`/chats/${user._id}`);
+
+    setIsUserChatsLoading(false);
+
+    if (response.error) {
+      return setUserChatsError(response);
+    }
+
+    setUserChats(response);
+  };
+
+  getUserChats();
+}, [user, notifications]);
+// useEffect(() => {
+//     const getUsers = async () => {
+       
+//             // server route expects /api/chats/potential/:userId
+//              const response = await getRequest(`${BaseUrl}/users`);
+//               if (response.error) {
+//             return setUserChatsError(response);
+//         }
+// const pchat=response.filter((u)=>{
+//     let isChatCreated=false;
+//     if(user?._id===u._id){
+//         return false;
+//     }
+//     if(userChats){
+//         isChatCreated= userChats?.some((chat)=>{
+//            return chat.members[0]===u._id || chat.members[1]===u._id
+//         });
+//     }
+//     return !isChatCreated;
+// })
+//         setPotentialChats(pchat);
+//         setAllUsers(response);
+    
+//     };
+//         getUsers();
+   
+// }, [userChats]);
+
+// useEffect(() => {
+//     const getUserChats = async () => {
+//         if(user?._id){
+//             setIsUserChatsLoading(true);
+//         setUserChatsError(null);
+//              // server route expects /api/chats/:userId
+//              const response = await getRequest(`${BaseUrl}/chats/${user._id}`);
+//              setIsUserChatsLoading(false);
+//               if (response.error) {
+//             return setUserChatsError(response);
+//         }
+//         setUserChats(response);
+//         }
+//     };
+//         getUserChats();
+   
+// }, [user,notifications]);
+const createChat = useCallback(async (firstId, secondId) => {
+  const response = await PostRequest("/chats", {
+    firstId,
+    secondId,
+  });
+
+  if (response.error) {
     console.error("Error creating chat:", response.message);
     return;
-}
-setUserChats((prevChats)=>[...prevChats,response])
-}, [])
+  }
+
+  setUserChats((prevChats) => [...prevChats, response]);
+
+}, []);
+// const createChat=useCallback(async (firstId,secondId) => {
+// const response=await PostRequest
+// (`${BaseUrl}/chats`,JSON.stringify({firstId,secondId})
+// );
+// if(response.error){
+//     console.error("Error creating chat:", response.message);
+//     return;
+// }
+// setUserChats((prevChats)=>[...prevChats,response])
+// }, [])
 
 const updateCurrentChat=useCallback((chat)=>{
     setCurrentChat(chat);
 }, [])
-
 useEffect(() => {
-    const getMessages = async () => {
-        // if(currentChat?._id){
-            setIsMessagesLoading(true);
-        setMessagesError(null);
-             // server route expects /api/messages/:chatId
-             const response = await getRequest(`${BaseUrl}/messages/${currentChat?._id}`);
-             setIsMessagesLoading(false);
-              if (response.error) {
-            return setMessagesError(response);
-        }
-        setMessages(response);
-        }
-    // };
-        getMessages();
-   
-}, [currentChat]);
+  const getMessages = async () => {
+    if (!currentChat?._id) return;
 
-const sendTextMessage=useCallback(async (textMessage,sender,currentChatId,setTextMessage)=>{
-    if(!textMessage.trim()){
-        return;
+    setIsMessagesLoading(true);
+    setMessagesError(null);
+
+    const response = await getRequest(`/messages/${currentChat._id}`);
+
+    setIsMessagesLoading(false);
+
+    if (response.error) {
+      return setMessagesError(response);
     }
-    const response=await PostRequest(`${BaseUrl}/messages`,JSON.stringify
-        ({chatId:currentChatId,senderId:sender._id,text:textMessage}))
-        if(response.error){
-            return sendTextError(response);
-        }
-        // optimistically update messages list with new message
-        setNewMessage(response);
-         setMessages((prevMessages)=>[...prevMessages,response]);
-        setTextMessage("");
-}, [])
+
+    setMessages(response);
+  };
+
+  getMessages();
+}, [currentChat]);
+// useEffect(() => {
+//     const getMessages = async () => {
+//         // if(currentChat?._id){
+//             setIsMessagesLoading(true);
+//         setMessagesError(null);
+//              // server route expects /api/messages/:chatId
+//              const response = await getRequest(`${BaseUrl}/messages/${currentChat?._id}`);
+//              setIsMessagesLoading(false);
+//               if (response.error) {
+//             return setMessagesError(response);
+//         }
+//         setMessages(response);
+//         }
+//     // };
+//         getMessages();
+   
+// }, [currentChat]);
+const sendTextMessage = useCallback(async (textMessage,sender,currentChatId,setTextMessage) => {
+  if (!textMessage.trim()) return;
+
+  const response = await PostRequest("/messages", {
+    chatId: currentChatId,
+    senderId: sender._id,
+    text: textMessage,
+  });
+
+  if (response.error) {
+    return sendTextError(response);
+  }
+
+  // 🔥 optimistic update
+  setNewMessage(response);
+  setMessages((prev) => [...prev, response]);
+  setTextMessage("");
+
+}, []);
+// const sendTextMessage=useCallback(async (textMessage,sender,currentChatId,setTextMessage)=>{
+//     if(!textMessage.trim()){
+//         return;
+//     }
+//     const response=await PostRequest(`${BaseUrl}/messages`,JSON.stringify
+//         ({chatId:currentChatId,senderId:sender._id,text:textMessage}))
+//         if(response.error){
+//             return sendTextError(response);
+//         }
+//         // optimistically update messages list with new message
+//         setNewMessage(response);
+//          setMessages((prevMessages)=>[...prevMessages,response]);
+//         setTextMessage("");
+// }, [])
 
 const markAllNotificationsAsRead=useCallback((notifications) => {
     const mNotifications=notifications.map((n)=>({...n,isRead:true}));

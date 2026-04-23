@@ -8,24 +8,41 @@ export const useFetchReciepient = (chat,user) => {
   const [recipientUser, setRecipientUser] = useState(null);
   const [error, setError] = useState(null);
    const recipientId=chat?.members?.find((id)=>id!==user?._id);
-   
-useEffect(() => {
-    const getuser = async () => {
-        if (!recipientId) {
-            // setError({ error: true, message: "Recipient ID not found in chat members" });
-            return null;
-        }
-  // server exposes GET /api/users/:userId
-  const response = await getRequest(`${BaseUrl}/users/find/${recipientId}`);
-        if (response.error) {
-            return setError(response);     
+   useEffect(() => {
+  const getUser = async () => {
+    if (!recipientId) return; // ✅ guard
+
+    setError(null); // ✅ reset previous error
+
+    const response = await getRequest(`/users/find/${recipientId}`);
+
+    if (response.error) {
+      setError(response);
+      return;
+    }
+
+    setRecipientUser(response);
+  };
+
+  getUser();
+}, [recipientId]);
+// useEffect(() => {
+//     const getuser = async () => {
+//         if (!recipientId) {
+//             // setError({ error: true, message: "Recipient ID not found in chat members" });
+//             return null;
+//         }
+//   // server exposes GET /api/users/:userId
+//   const response = await getRequest(`${BaseUrl}/users/find/${recipientId}`);
+//         if (response.error) {
+//             return setError(response);     
         
-        }
-        setRecipientUser(response);
-    }   
-        getuser();      
+//         }
+//         setRecipientUser(response);
+//     }   
+//         getuser();      
   
-  } , [recipientId]);
+//   } , [recipientId]);
 
     return { recipientUser, error };
     

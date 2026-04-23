@@ -34,34 +34,84 @@ const updateRegisterInfo = useCallback((info) => {
 const updateLoginInfo = useCallback((info) => {
     setLoginInfo(info);
 }, []);
+//register user
 const registerUser=useCallback(async (e) => {
     e.preventDefault();
     setIsRegisterLoading(true);
     setRegisterError(null);
-   const response = await PostRequest(`${BaseUrl}/users/register`, JSON.stringify(registerInfo));
+   const response = await PostRequest(`/users/register`, registerInfo);
     if (response.error) {
         setRegisterError(response);
         return;
     }
     setIsRegisterLoading(false);
-    localStorage.setItem("user", JSON.stringify(response));
+    // 🔥 store user
+  localStorage.setItem("user", JSON.stringify(response));
+  // 🔥 if backend sends token
+  if (response.token) {
+    localStorage.setItem("token", response.token);
+  }
         setUser(response);
-       
+         setIsRegisterLoading(false);
     
 }, [registerInfo]);
-const loginUser=useCallback(async (e) => {
-    e.preventDefault();
-    setIsLoginLoading(true);
-    setLoginError(null);
-    const response = await PostRequest(`${BaseUrl}/users/login`, JSON.stringify(loginInfo));
-    if (response.error) {
-        setLoginError(response);
-        return;
-    }
+
+//login user
+const loginUser = useCallback(async (e) => {
+  e.preventDefault();
+
+  setIsLoginLoading(true);
+  setLoginError(null);
+
+  const response = await PostRequest("/users/login", loginInfo);
+
+  if (response.error) {
+    setLoginError(response);
     setIsLoginLoading(false);
-    localStorage.setItem("user", JSON.stringify(response));
-    setUser(response);
+    return;
+  }
+
+  // 🔥 store user
+  localStorage.setItem("user", JSON.stringify(response));
+
+  // 🔥 store token separately
+  if (response.token) {
+    localStorage.setItem("token", response.token);
+  }
+
+  setUser(response);
+  setIsLoginLoading(false);
+
 }, [loginInfo]);
+// const registerUser=useCallback(async (e) => {
+//     e.preventDefault();
+//     setIsRegisterLoading(true);
+//     setRegisterError(null);
+//    const response = await PostRequest(`${BaseUrl}/users/register`, JSON.stringify(registerInfo));
+//     if (response.error) {
+//         setRegisterError(response);
+//         return;
+//     }
+//     setIsRegisterLoading(false);
+//     localStorage.setItem("user", JSON.stringify(response));
+//         setUser(response);
+       
+    
+// }, [registerInfo]);
+
+// const loginUser=useCallback(async (e) => {
+//     e.preventDefault();
+//     setIsLoginLoading(true);
+//     setLoginError(null);
+//     const response = await PostRequest(`${BaseUrl}/users/login`, JSON.stringify(loginInfo));
+//     if (response.error) {
+//         setLoginError(response);
+//         return;
+//     }
+//     setIsLoginLoading(false);
+//     localStorage.setItem("user", JSON.stringify(response));
+//     setUser(response);
+// }, [loginInfo]);
 const logoutUser=useCallback(() => {
     localStorage.removeItem("user");
     setUser(null);
