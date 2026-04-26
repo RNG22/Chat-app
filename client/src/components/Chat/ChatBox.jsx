@@ -9,7 +9,7 @@ import InputEmoji from 'react-input-emoji';
 
 export const ChatBox = () => {
     const {user}=useContext(AuthContext);
-    const {currentChat, messages,isMessagesLoading,messagesError,sendTextMessage,sendTextError,newMessage}=useContext(ChatContext);
+    const {currentChat, messages,isMessagesLoading,messagesError,sendTextMessage,sendTextError,newMessage,showChat, setShowChat}=useContext(ChatContext);
     const {recipientUser}=useFetchReciepient(currentChat,user);
     const [textMessage,setTextMessage]=useState("");
     const scroll=useRef()
@@ -31,7 +31,14 @@ useEffect(() => {
     }
   return (
    <Stack gap={4} className='chat-box'>
-        <div className="chat-header"><strong>{recipientUser?.name}</strong></div>
+    <div className='chat-header-container d-flex'>
+    <span className="icon"><span className="icon" onClick={() => setShowChat(false)}>
+  <i
+    className="fa-solid fa-angle-left"
+    style={{ color: "rgb(72, 112, 223);" }}
+  ></i>
+</span></span>
+        <div className="chat-header"> <strong>{recipientUser?.name}</strong></div></div>
     <Stack gap={3} className='messages'>
 {messages && messages.map((message,index)=>
 <Stack key={index} 
@@ -46,7 +53,7 @@ ref={scroll}
     <InputEmoji
   value={textMessage}
   onChange={setTextMessage} fontFamily='nunito' borderColor='rgba(72,112,223,0.2)'
-  cleanOnEnter
+  onEnter={() => sendTextMessage(textMessage, user, currentChat._id, setTextMessage)}
   placeholder="Type a message"
 />
     <button onClick={()=>sendTextMessage(textMessage,user,currentChat._id,setTextMessage)} className='send-btn'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill" viewBox="0 0 16 16">

@@ -22,6 +22,7 @@ const [onlineUsers,setOnlineUsers]=useState([]);
 const [notifications,setNotifications]=useState([]);
 const [allUsers,setAllUsers]=useState([]);
 console.log("notifications", notifications);
+    const [showChat, setShowChat] = useState(false);
 
 // initial socket
 useEffect(() => {   
@@ -191,6 +192,7 @@ const createChat = useCallback(async (firstId, secondId) => {
 
 const updateCurrentChat=useCallback((chat)=>{
     setCurrentChat(chat);
+    setShowChat(true);
 }, [])
 useEffect(() => {
   const getMessages = async () => {
@@ -308,6 +310,6 @@ return (
     <ChatContext.Provider value={{userChats,isUserChatsLoading,userChatsError,potentialChats
         ,createChat,updateCurrentChat,messages,isMessagesLoading,
         messagesError,currentChat,sendTextMessage,sendTextError,newMessage, onlineUsers,notifications,
-        allUsers,markAllNotificationsAsRead,markNotificationAsRead,markThisUserNotificationsAsRead}}>{children}</ChatContext.Provider>
+        allUsers,markAllNotificationsAsRead,markNotificationAsRead,markThisUserNotificationsAsRead,showChat,setShowChat}}>{children}</ChatContext.Provider>
 )
 }

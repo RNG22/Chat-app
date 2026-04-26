@@ -29,6 +29,14 @@ body {
   border-bottom: 1px solid rgb(100, 100, 100);
   width: 380px;
 }
+@media (max-width: 991px) {
+  .messages-box {
+    width: 100%;
+  }
+  .user-card {
+    width: 100%;
+  }
+}
 
 .user-card .text-content {
   width: 170px;
@@ -62,22 +70,84 @@ body {
   overflow-y: auto;
   background: rgb(25, 25, 25);
   border-radius: 10px;
+  min-height: calc(100vh - 10rem);
 }
 
 .messages-box {
   height: 85vh;
 }
+/* Desktop default */
+.messages-box {
+  display: block;
+}
 
-/* Chat Header */
-.chat-header {
+.chat-wrapper {
+  display: block;
+flex: 1 1 auto;
+flex-direction: column;
+align-self: stretch;
+max-height: calc(100vh - 10rem);
+
+  overflow-y: auto;
+  /* background: rgb(25, 25, 25); */
+  border-radius: 10px;
+}
+.chat-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Mobile behavior */
+@media (max-width: 991px) {
+  .messages-box.hide-mobile {
+    display: none !important;
+  }
+
+  .chat-wrapper {
+    display: none;
+    width: 100%;
+  }
+
+  .chat-wrapper.show-mobile {
+    display: block;
+  }
+}
+/* @media (max-width: 991px) {
+ .messages-box {
+  display: none !important;
+}
+} */
+.chat-header-container {
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 0.75rem;
   color: white;
   background: rgb(30, 30, 30);
 }
 
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* important for centering */
+}
+
+.icon {
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 991px) {
+  .icon {
+    display: block;
+    margin-left: 2px;
+  }
+}
+.chat-header {
+  flex: 1;
+  text-align: center;
+}
 /* Messages */
 .messages {
   max-height: calc(100vh - 15rem);
@@ -91,6 +161,11 @@ body {
   padding: 0.75rem;
   border-radius: 5px;
   max-width: 50%;
+}
+.message span{
+  width: 100%;
+  text-wrap: auto;
+  overflow-wrap: break-word;
 }
 
 .message.self {
@@ -109,6 +184,9 @@ body {
   width: 100%;
   background: rgb(30, 30, 30);
   padding: 1rem;
+}
+.react-emoji{
+width: 92% !important;
 }
 .send-btn {
   border: none;
