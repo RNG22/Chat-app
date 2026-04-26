@@ -186,7 +186,7 @@ max-height: calc(100vh - 10rem);
   padding: 1rem;
 }
 .react-emoji{
-width: 92% !important;
+width: 90% !important;
 }
 .send-btn {
   border: none;
