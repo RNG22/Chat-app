@@ -200,6 +200,7 @@ width: 92% !important;
 /* Notification */
 .notifications {
   position: relative;
+  padding: 1rem;
 }
 
 .notifications-icon {
@@ -286,4 +287,23 @@ width: 92% !important;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
+}
+.three-dot-toggle {
+  border: none !important;
+  font-size: 20px !important;
+  padding: 0 8px !important;
+}
+
+.three-dot-toggle::after {
+  display: none !important; /* removes default arrow */
+}
+.three-dot-toggle:hover {
+  background: transparent !important;
+  color: #00bd9b !important;
+}
+.logout:hover {
+  background-color: #00bd9b !important;
+}
+.username :hover{
+  background-color: #00bd9b !important;
 }
