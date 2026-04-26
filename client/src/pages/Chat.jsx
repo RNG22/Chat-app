@@ -12,7 +12,7 @@ export const Chat = () => {
   
   // console.log("userChats", userChats);
   return (
-    <Container>
+    <>
       <PotentialChats/>
       {userChats?.length <1 ? null : 
     (<Stack direction='horizontal' gap={3} className='mb-3 align-items-start'>
@@ -30,6 +30,6 @@ export const Chat = () => {
       </div>
     </Stack>)}
    
-      </Container>
+      </>
   )
 }

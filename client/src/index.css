@@ -66,11 +66,11 @@ body {
 
 /* Chat Box */
 .chat-box {
-  max-height: calc(100vh - 10rem);
+  max-height: calc(100vh - 25rem);
   overflow-y: auto;
   background: rgb(25, 25, 25);
   border-radius: 10px;
-  min-height: calc(100vh - 10rem);
+  min-height: calc(100vh - 25rem);
 }
 
 .messages-box {
@@ -207,7 +207,7 @@ width: 92% !important;
   color: white;
   cursor: pointer;
   position: relative;
-  margin-right: 1rem;
+  /* margin-right: 1rem; */
 }
 
 .notifications-box {
