@@ -200,7 +200,7 @@ width: 90% !important;
 /* Notification */
 .notifications {
   position: relative;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 .notifications-icon {

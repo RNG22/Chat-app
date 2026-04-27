@@ -19,7 +19,7 @@ export const NavBar = () => {
                 <span className='text-warning'>Logged in as {user.name}</span>
             )} */}
             <Nav>
-                <Stack direction='horizontal'>
+                <Stack direction='horizontal' gap={3}>
                 {/* {user ? (
                     <>
                         <Notification />
