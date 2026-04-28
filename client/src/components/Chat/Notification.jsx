@@ -29,7 +29,7 @@ export const Notification = () => {
                 <div className='mark-as-read' onClick={()=>markAllNotificationsAsRead(notifications)}>Mark all as read</div>
                 </div>
                
-                {modifiedNotifications?.length ==0 ? <div className='notifications'>No notifications yet...</div> : null}
+                {modifiedNotifications?.length ==0 ? <div className='notifications notifications-text'>No notifications yet...</div> : null}
                {modifiedNotifications && modifiedNotifications.map((n,index)=>{
                 return <div key={index} className={`${n.isRead ? "notification" : "notification not-read"}`}
                 
